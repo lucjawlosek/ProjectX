@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static com.ninegag.test.LocatorsList.*;
+
 
 public class Selenium9gag {
     protected MyDriverWrapper myDriverWrapper;
@@ -26,15 +28,42 @@ public class Selenium9gag {
         return myDriverWrapper.getDriver();
     }
 
-    public void login() {
-        $().findElement(By.id("jsid-login-button")).click();
-        $().findElement(By.id("login-email-name")).sendKeys("przeplatka@gmail.com");
-        $().findElement(By.id("login-email-password")).sendKeys("password");
-        $().findElement(By.xpath("//*[@id=\"login-email\"]/div[3]/input")).click();
+    public void signUp(String name, String email, String password) {
+        $().findElement(By.id(SIGN_UP_BUTTON)).click();
+        $().findElement(By.xpath(SIGN_UP_WITH_EMAIL)).click();
+        $().findElement(By.id(SIGN_UP_USERNAME)).sendKeys(name);
+        $().findElement(By.id(SIGN_UP_EMAIL)).sendKeys(email);
+        $().findElement(By.id(SIGN_UP_PASSWORD)).sendKeys(password);
+        $().findElement(By.xpath(CAPTCHA)).click();
+        wait(10);
+        $().findElement(By.xpath(SIGN_UP_WITH_DATA_BUTTON)).click();
+        $().findElement(By.xpath(I_DONT_WANT_AN_APP)).click();
+    }
+
+    public void logIn(String email, String password) {
+        $().findElement(By.id(SIGN_IN_BUTTON)).click();
+        $().findElement(By.id(LocatorsList.LOG_IN_USERNAME_EMAIL)).sendKeys(email);
+        $().findElement(By.id(LOG_IN_PASSWORD)).sendKeys(password);
+        $().findElement(By.xpath(LOG_IN_BUTTON)).click();
+    }
+
+    public void logOut() {
+        waitForElementToLoad(PROFILE_PICTURE, 10);
+        $().findElement(By.id(PROFILE_PICTURE)).click();
+        $().findElement(By.className(PROFILE_LOGOUT_BUTTON)).click();
+    }
+
+    public void deleteAccount() {
+        $().findElement(By.id(PROFILE_PICTURE)).click();
+        $().findElement(By.id(PROFILE_SETTINGS)).click();
+        $().findElement(By.id(DELETE_MY_ACCOUNT)).click();
+        $().findElement(By.id(DELETE_MY_ACCOUNT_CONFIRM)).click();
+        $().findElement(By.id(DELETE_MY_ACCOUNT_PASSWORD)).sendKeys("password123");
+        $().findElement(By.id(DELETE_MY_ACCOUNT_CONFIRM_BUTTON)).click();
     }
 
     public void fuckGDPR() {
-        $().findElement(By.xpath("/html/body/div[7]/div[1]/div[2]/div/div[3]/button[2]/span")).click();
+        $().findElement(By.xpath(ACCEPT_GDPR_POPUP)).click();
     }
 
     public void openPage() {
@@ -42,14 +71,22 @@ public class Selenium9gag {
     }
 
     public void switchTheDarkModeButton() {
-        $().findElement(By.id("jsid-header-darkmode-btn")).click();
+        $().findElement(By.id(DARK_MODE_SWITCH)).click();
     }
 
     public void searchText(Object searchedText) {
-        $().findElement(By.id("jsid-header-search-btn")).click();
-        $().findElement(By.id("jsid-search-input")).sendKeys((CharSequence) searchedText);
-        $().findElement(By.id("jsid-search-input")).sendKeys(Keys.ENTER);
-        WebDriverWait wait = new WebDriverWait(myDriverWrapper.getDriver(),10);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("search-hero")));
+        $().findElement(By.id(SEARCH_ICON)).click();
+        $().findElement(By.id(SEARCH_FIELD)).sendKeys((CharSequence) searchedText);
+        $().findElement(By.id(SEARCH_FIELD)).sendKeys(Keys.ENTER);
     }
+
+    public void waitForElementToLoad(String elementId, int timeoutSeconds) {
+        WebDriverWait wait = new WebDriverWait(myDriverWrapper.getDriver(), timeoutSeconds);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementId)));
+    }
+
+    public void wait(int waitingSeconds) {
+        WebDriverWait wait = new WebDriverWait(myDriverWrapper.getDriver(), waitingSeconds);
+    }
+
 }
