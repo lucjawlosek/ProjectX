@@ -1,12 +1,12 @@
-package com.ninegag.test;
+package com.testproject.env;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class MyDriverWrapper {
+public class DriverWrapper {
     private WebDriver driver;
 
-    public MyDriverWrapper() {
+    public DriverWrapper() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
